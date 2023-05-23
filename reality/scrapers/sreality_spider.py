@@ -18,7 +18,7 @@ class SrealitySpider(scrapy.Spider):
             product = Product(title=title, img_url=img_url, prod_url=prod_url)
             product.save()
             product_count += 1
-            if product_count >= 10:
+            if product_count >= 500:
                 break
 
         # Переход на следующую страницу, если нужно

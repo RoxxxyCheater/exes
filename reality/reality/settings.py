@@ -25,8 +25,7 @@ SECRET_KEY = 'django-insecure-vo25nmtf_qi8or!!5op2dj08&ba_o(!t^l6wzfu7+)n$iua%!6
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 SITE_ID=1
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['localhost', '127.0.0.1','127.0.0.1:8000']
 
 # Application definition
 
@@ -37,7 +36,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.postgres',
     'market',
+    
 ]
 
 MIDDLEWARE = [
@@ -77,7 +78,7 @@ WSGI_APPLICATION = 'reality.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'HOST': 'localhost',
+        'HOST': 'db', #localhost для миграций
         'PORT': '5432',
         'NAME': 'postgres',
         'USER': 'postgres',

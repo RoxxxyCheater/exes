@@ -1,6 +1,7 @@
 import scrapy
+from scrapy.crawler import CrawlerProcess
 from market.models import Product
-
+from scrapy.utils.project import get_project_settings
 class SrealitySpider(scrapy.Spider):
     name = 'sreality'
     start_urls = ['https://www.sreality.cz/hledani/prodej/domy']
@@ -24,4 +25,10 @@ class SrealitySpider(scrapy.Spider):
         # Переход на следующую страницу, если нужно
         next_page_url = response.css('.next a::attr(href)').get()
         if next_page_url and product_count < 500:
-            yield response.follow(next_page_url, self.parse)
+            yield response.follow(next_page_url, self.parse),
+
+# Запуск парсера внутри Django
+def run_spider():
+    process = CrawlerProcess(get_project_settings())
+    process.crawl(SrealitySpider)
+    process.start()

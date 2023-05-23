@@ -1,0 +1,20 @@
+version: '3'
+services:
+  web:
+    build:
+      context: ./sreality.cz  # Путь к директории контекста сборки
+      dockerfile: ../Dockerfile  # Путь к Dockerfile относительно docker-compose.yml
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+    volumes:
+      - ./data:/app/data  # Монтирование директории data в контейнер
+  db:
+    image: postgres
+    environment:
+      POSTGRES_DB: product
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: qwerty
+    volumes:
+      - ./data:/var/lib/postgresql/data

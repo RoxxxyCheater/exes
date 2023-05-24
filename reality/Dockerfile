@@ -1,20 +1,20 @@
 
-# Используйте базовый образ Python
+# Use base Python
 FROM python:3.9
 
-# Установите переменную среды для отключения вывода буфера
+# Set an environment variable to disable buffer output
 ENV PYTHONUNBUFFERED 1
 
-# Установите рабочую директорию внутри контейнера
+# Set the working directory inside the container
 WORKDIR /app
 
-# Установка зависимостей проекта
+# Installing project dependencies
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 
-# Копирование кода проекта в контейнер
+# Copying project code to a container
 COPY . .
 
-# Запуск парсера и сервера Django при запуске контейнера
+# Running Django parser and server when container starts
 CMD scrapy runspider scrapers/sreality_spider.py && python manage.py runserver 0.0.0.0:8000

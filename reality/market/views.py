@@ -2,7 +2,7 @@ from django.shortcuts import render
 from .models import Product
 
 def products(request):
-    # Загрузка данных из базы данных
+    # Temporary - unloading from django
     products = Product.objects.all()
     context = {}
     context['products'] = products

@@ -9,8 +9,9 @@
         {% if products %}
         {% for product in products %}
             <li>{{ product.title }}</li>
-            <li><img src="{{ product.img_url }}" alt="Product Image"></li>
+            <li><img src="{{ product.img_url }}" alt="{{ product.img_url }}" style="height: 100px; width: 100px;"></li>
         {% endfor %}
+        {% endif %}
     </ul>
 </body>
 </html>

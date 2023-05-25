@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.postgres',
     'market',
+    'scrapers',
     
 ]
 
@@ -78,7 +79,7 @@ WSGI_APPLICATION = 'reality.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'HOST': 'db', #localhost для миграций
+        'HOST': '192.168.242.1', #localhost для миграций
         'PORT': '5432',
         'NAME': 'postgres',
         'USER': 'postgres',

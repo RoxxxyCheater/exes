@@ -1,30 +1,23 @@
 import scrapy
-from scrapy.crawler import CrawlerProcess
-from market.models import Product
-from scrapy.utils.project import get_project_settings
-class SrealitySpider(scrapy.Spider):
-    name = 'sreality'
-    start_urls = ['https://www.sreality.cz/hledani/prodej/domy']
+import requests
+
+class RealitySpiderSpider(scrapy.Spider):
+    name = "reality_spider"
+    allowed_domains = ["sreality.cz"]
+    start_urls = ["https://sreality.cz/"]
+    pages_count = 25
+
+    def start_requests(self):
+        for page in range(1, 1 + self.pages_count):
+            url = f'https://www.sreality.cz/api/cs/v2/estates?category_main_cb=2&category_type_cb=1&noredirect=1&page={page}&per_page=20&tms=1684963515218'
+            yield scrapy.Request(url, callback=self.parse)
 
     def parse(self, response):
-        product_count = 0
+        api_response = requests.get(response.url)
+        if api_response.status_code == 200: 
+            data = api_response.json()
+            for item in data["_embedded"]["estates"]:
+                link = item['_links']["images"][0]['href'] if "_links" in item and item['_links']["images"][0] else "N/A"
+                print("API Title:", item["name"])
+                print("Image URL:", link.split('?')[0])
 
-        for item in response.css('.item'):
-            title = item.css('.title a::text').get()
-            img_url = item.css('.image img::attr(src)').get()
-            prod_url = item.css('.title a::attr(href)').get()
-
-            product = Product(title=title, img_url=img_url, prod_url=prod_url)
-            product.save()
-            product_count += 1
-            if product_count >= 500:
-                break
-
-        next_page_url = response.css('.next a::attr(href)').get()
-        if next_page_url and product_count < 500:
-            yield response.follow(next_page_url, self.parse),
-
-def run_spider():
-    process = CrawlerProcess(get_project_settings())
-    process.crawl(SrealitySpider)
-    process.start()

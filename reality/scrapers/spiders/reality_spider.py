@@ -42,6 +42,15 @@ class RealitySpiderSpider(scrapy.Spider):
                 # Create cursor to SQL-request
                 cursor = connection.cursor()
                 
+                # Create table if not exists
+                create_table_query = '''
+                CREATE TABLE IF NOT EXISTS market_Product (
+                    id SERIAL PRIMARY KEY,
+                    title TEXT,
+                    img_url TEXT
+                )
+                '''
+                cursor.execute(create_table_query)
                 # Insert data to database
                 insert_query = f"INSERT INTO market_Product (title, img_url) VALUES ('{title}', '{img_url}')"
                 cursor.execute(insert_query)
@@ -50,3 +59,10 @@ class RealitySpiderSpider(scrapy.Spider):
                 cursor.close()
                 connection.commit()
                 connection.close()
+
+
+
+
+
+
+

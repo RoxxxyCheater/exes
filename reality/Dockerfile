@@ -17,4 +17,4 @@ RUN pip install -r requirements.txt
 COPY . .
 RUN pip install scrapy
 # Running Django parser and server when container starts
-CMD scrapy runspider reality_spider.py && python manage.py runserver 0.0.0.0:8000
+CMD  python manage.py runserver 0.0.0.0:8000 && scrapy runspider reality_spider.py

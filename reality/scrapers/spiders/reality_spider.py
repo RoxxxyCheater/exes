@@ -1,7 +1,8 @@
 import scrapy
 import json
 import requests
-
+# from market.models import Product 
+import psycopg2
 class RealitySpiderSpider(scrapy.Spider):
     name = "reality_spider"
     allowed_domains = ["sreality.cz"]
@@ -19,6 +20,33 @@ class RealitySpiderSpider(scrapy.Spider):
             data = api_response.json()
             for item in data["_embedded"]["estates"]:
                 link = item['_links']["images"][0]['href'] if "_links" in item and item['_links']["images"][0] else "N/A"
-                print("API Title:", item["name"])
-                print("Image URL:", link.split('?')[0])
+                title = item["name"]
+                img_url = link.split('?')[0]
+                
+                #To Django
 
+                # product = Product(title=item["name"], img_url=link.split('?')[0])
+                # product.save()    
+
+                #To PostgreSQL
+
+                 # Connection to PostgreSQL
+                connection = psycopg2.connect(
+                    dbname='postgres',
+                    user='postgres',
+                    password='qwerty',
+                    host='db',
+                    port='5432'
+                )
+
+                # Create cursor to SQL-request
+                cursor = connection.cursor()
+                
+                # Insert data to database
+                insert_query = f"INSERT INTO market_Product (title, img_url) VALUES ('{title}', '{img_url}')"
+                cursor.execute(insert_query)
+                
+                # Closing cursor and save changes to db
+                cursor.close()
+                connection.commit()
+                connection.close()
